@@ -1,0 +1,15 @@
+CPnet:  conditional -> cpynet.py
+lpm:    lexicographic -> lpm.py
+rpf:    ranking -> ranking_formula.py
+aso:    ranking -> answer_set_optimization.py
+penalty_logic:  weighted -> penalty_logic.py
+
+
+
+AGENT
+ type:PenaltyLogic
+ size:5
+ clauses:1
+ literals:1
+ formulas:3
+END
