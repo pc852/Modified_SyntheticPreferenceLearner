@@ -1,63 +1,23 @@
-# SyntheticPreferenceGenerator
-An extensible python program which generates sets of synthetic preference examples from randomly generated model of specified preference languages.
+# Modified SyntheticPreferenceGenerator
+A modified version of the SyntheticPreferenceGenerator written by Dr. Michael Huelsman https://github.com/xLeachimx/SyntheticPreferenceLearner. 
+
+### Dependencies
+***
+Refer to the original version of README for installation instructions. **IMPORTANT**: Before installation of genCPnet package, search in the files "degen_multi.cc", "netcount.cc", and "tables.h" and change the string "factorial" to another string (e.g. factoria). This is because the string "factorial" clashes with content from the dependecy gmp.
+
+### Overview
+***
+Refer to the orginal version of README for other functionalities. This version further includes generating 100 example pairs with labels from a chosen preference type, and the option to run learning experiments with asprin.
 
 
-## Dependencies:
-
-  Pytorch: https://pytorch.org/
-  GenCPNet: https://github.com/nmattei/GenCPnet
-
-
-## Usage:
-
-  `python3 SynthPrefGen.py [options] [config file]`
-
-- Options:
-  `-p problem subproblem` specifies the problem and subproblem to run.
-
-  Problem Numbers:
-
-  |Problem Number| Description |
-  |--------------|-------------|
-  | 1            | Learning Preferences with Neural Networks.|
-  | 2            | Learning Preferences with Lexicographic Preference Models.|
-  | 3            | Learning Preferences with Simulated Annealing.|
-  | 4            | Various related baselines.|
-
-  Subproblem numbers for problems 1-3
-
-  |Subproblem Number| Description |
-  |--------------|-------------|
-  | 1               | Learning Preferences from a single agent. |
-  | 2               | Learning Joint Preferences (Utilitarian).|
-  | 3               | Learning Joint Preferences (Maximin).|
-  | 4               | Learning Preferences from a single agent (Full Evaluation).|
-
-  Note: Subproblem 3 for problem 1 is not implemented.
-
-  Subproblem for problem 4:
-
-  | Subproblem | Description |
-  |--------------|-------------|
-  | 1          | Builds and analyzes full fitness graph.|
-  | 2          | Builds and analyzes partial fitness graph using hill climbing.|
-  | 3          | Analyzes basic hill climbing and random restart approach. |
-
-  `-i [config file]`
-
-  Specifies the type of model to be learned by simulated annealing (default: 113RPF_learn.config).
-  Note: Only applies to problems 2 and 4.
-
-  `-l [n]`
-
-  Specifies the number of hidden layers to add to the neural network (default: 3, max: 3).
-  Note: Only applies to problem 1.
-
-  `-o [filename]`
-
-  Specifies the name of the data output file (default: a.out).
-
-
-#Warning
-  This software is provided as-is and while efforts have been made to make it more
-  user friendly, improper usage may render undesired results.
+### Usage
+*** 
+On top of the original commands, a program 5 is newly added for learning with asprin. 
+`python3 SynthPrefGen.py -p 5 <subprogram> pref_model.config`
+Subprogram details:
+|  Subprogram | Description |
+|--|--|
+| 0 | Generates 100 examples pairs with labels and store them locally in the relative directory "../Asprin/temp\_run"/, and the details of the chosen preference type is stored in "../Asprin/Generated\_Preference\_Model/"|
+| 1 | Execute 5-fold cross validation learning with asprin using existing local files in the directory above containing example pairs, outputing training and validation accuracies |
+| 2 | Combination of subprograms 0 and 1, in that order |
+| 3 | Subprogram 2 executed 25 times |
