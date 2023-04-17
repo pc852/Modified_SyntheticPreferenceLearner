@@ -63,7 +63,7 @@ class RankingPrefFormula:
     #
     # Postcond:
     #   Returns the relation between alt1 and alt2.
-    def compare(self, alt1, alt2, dnf=True):
+    def compare(self, alt1, alt2, dnf=False):
         rank1 = rank2 = 0
         if dnf:
             rank1 = self.eval_DNF(alt1)

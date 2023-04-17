@@ -105,7 +105,7 @@ class PrefLiteral:
     #   Returns a string representation of the literal
     def __str__(self):
         result = ""
-        if self.negated:
+        if self.negated == False:
             result += '-'
         result += ''.join(['(',str(self.attr),',',str(self.value),')'])
         return result

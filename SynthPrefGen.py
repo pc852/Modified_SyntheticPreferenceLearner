@@ -315,16 +315,16 @@ def asprin_prep(args):
                 alt2 = ex_lst[1].split(',')
 
                 # parse the generated examples into ASP facts as they are
-                if ex_lst[-1] == '2' or ex_lst[-1] == '3' or ex_lst[-1] == '0':
+                if ex_lst[-1] == '2' or ex_lst[-1] == '3' or ex_lst[-1] == '0' or ex_lst[-1] == '-2':
                     for j in range(len(alt1)):
-                        if alt1[j] == '2':
+                        if alt1[j] == '1':
                             temp.write("in(a(%d),%d).\n" %(j+1, i*2+1))
                     for j in range(len(alt2)):
-                        if alt2[j] == '2':
+                        if alt2[j] == '1':
                             temp.write("in(a(%d),%d).\n" %(j+1, i*2+2))
 
                 # parse the generated examples into ASP facts, except the preferred model takes the smaller index of a pair
-                elif ex_lst[-1] == '-2':
+                elif ex_lst[-1] == '5':
                     for j in range(len(alt1)):
                         if alt2[j] == '2':
                             temp.write("in(a(%d),%d).\n" %(j+1, i*2+1))
@@ -339,10 +339,12 @@ def asprin_prep(args):
                 ex_lst = ex_set_str[i].split()
                 del(ex_lst[-1])
                 del(ex_lst[0])
-                if ex_lst[-1] == '-2' or ex_lst[-1] =='2':
+                if ex_lst[-1] == '2': #or ex_lst[-1] =='2':
                     temp.write("input(%d,better,%d).\n" %(i*2+1, i*2+2))
                 elif ex_lst[-1] == '3':
                     temp.write("input(%d,unc,%d).\n" %(i*2+1, i*2+2))
+                elif ex_lst[-1] == '-2':
+                    temp.write("input(%d,worse,%d).\n" %(i*2+1, i*2+2))
                 elif ex_lst[-1] == '0':
                     temp.write("input(%d,eq,%d).\n" %(i*2+1, i*2+2))
 
@@ -354,7 +356,7 @@ def asprin_train_and_val(train_lst, val):
     all_count = 100
     train_matched = 0
     val_matched = 0
-    learning = '../Asprin/asprin_learn6.py'
+    learning = '../Asprin/asprin_learn.py'
     library = '../Asprin/cleaned_asprin_lib.lp'
     domain = '../Asprin/domain.lp'
     generation = '../Asprin/generation.lp'
@@ -388,7 +390,6 @@ def asprin_train_and_val(train_lst, val):
 
     for label in training_labels:
         if label in true_labels:
-            print(label)
             train_matched += 1
     train_acc = train_matched/train_count
 
@@ -478,6 +479,7 @@ def asprin_full_experiment(args):
         train_acc, val_acc = asprin_run(0)
         total_train_acc += train_acc
         total_val_acc += val_acc
+        print("experiment number ",i," done.")
 
     overall_train_acc = total_train_acc / 25
     overall_val_acc = total_val_acc / 25
