@@ -376,14 +376,20 @@ def asprin_train_and_val(train_lst, val):
     #result = run_asprin(['python3', learning, '-W', 'none', models, domain, generation, library, backend, train_lst[0], train_lst[1], train_lst[2], train_lst[3]])
     result = subprocess.run(['python3', learning, '-W', 'none', models, domain, generation, library, backend, train_lst[0], train_lst[1], train_lst[2], train_lst[3]], stdout=subprocess.PIPE)
     stdout = result.stdout.decode('utf-8')
+    stdout_show = result.stdout.decode('utf-8')
+
     stdout = stdout[:stdout.rfind('Optimization')]
     stdout = stdout[:stdout.rfind('Optimization')]
     stdout = stdout[:stdout.rfind('\n')]
     stdout = stdout[stdout.rfind('\n')+1:]
 
+    stdout_show = stdout_show[stdout_show.rfind('Learned preference statement'):]
+    print("\n")
+    print(stdout_show)
+
     training_labels = stdout.split()
     learned_pf = list(filter(lambda x: x.startswith('preference'), training_labels))
-    print('learned pref: ', learned_pf)
+    #print('learned pref: ', learned_pf)
     training_labels = list(filter(lambda x: x.startswith('output'), training_labels))
     for i in range(len(training_labels)):
         training_labels[i] = training_labels[i].replace('output(','(').replace('.','')
@@ -399,14 +405,14 @@ def asprin_train_and_val(train_lst, val):
             temp.write('%s.\n' %learned_pf[i])
 
     result = subprocess.run(['python3', learning, '-W', 'none', models, domain, library, backend, val, val_aux], stdout=subprocess.PIPE)
-    stdout = result.stdout.decode('utf-8')#show lose/4.
-    stdout = stdout[:stdout.rfind('Optimization')]
-    stdout = stdout[:stdout.rfind('Optimization')]
-    stdout = stdout[:stdout.rfind('\n')]
-    stdout = stdout[stdout.rfind('\n')+1:]
-    validating_labels = stdout.split()
+    stdout_learn = result.stdout.decode('utf-8')
+    stdout_learn = stdout_learn[:stdout_learn.rfind('Optimization')]
+    stdout_learn = stdout_learn[:stdout_learn.rfind('Optimization')]
+    stdout_learn = stdout_learn[:stdout_learn.rfind('\n')]
+    stdout_learn = stdout_learn[stdout_learn.rfind('\n')+1:]
+
+    validating_labels = stdout_learn.split()
     validating_labels = list(filter(lambda x: x.startswith('output'), validating_labels))
-    print('validating labels: ', validating_labels)
     for i in range(len(validating_labels)):
         validating_labels[i] = validating_labels[i].replace('output(','(').replace('.','')
 
